@@ -7,20 +7,20 @@ import OSPRNG.UniformDiscreteRNG;
 
 import java.util.Random;
 
-import static java.lang.Math.min;
-import static java.lang.Math.round;
+import static java.lang.Math.*;
 
 public class Main {
     public static void main(String[] args) {
         //monteCralo(100000);
         //syr(100);
 
-        int replikacie = 1000000;
+        pi();
+        /*int replikacie = 1000000;
         double spolu = 0;
         for (int i = 0; i < replikacie; i++) {
-            spolu += kolporter(15);
+            spolu += remeselnik(1);
         }
-        System.out.println("Priemerny zisk: " + spolu / replikacie);
+        System.out.println("Priemerny zisk: " + spolu / replikacie);*/
     }
 
     private static void monteCralo(int vsetky){
@@ -77,6 +77,52 @@ public class Main {
         }
         double vysledok = ((pocetBalikov * 10 - pocetNovin) * Cp) + (pocetNovin * Cv) - (pocetBalikov * 10 * Cn);
         System.out.println("Zisk: " + vysledok);
+        return vysledok;
+    }
+
+    private static double remeselnik(int typ){
+        TriangularRNG trian;
+        UniformDiscreteRNG unif;
+        int max = 0;
+        double naklady = 0;
+        double dopyt = 0;
+        double Cp = 0;
+        switch(typ){
+            case 0:
+                max = 70;
+                trian = new TriangularRNG(1.0, 1.75 ,2.5);
+                naklady = trian.sample();
+                unif = new UniformDiscreteRNG(40, 80);
+                dopyt = unif.sample();
+                Cp = 3;
+                break;
+            case 1:
+                max = 90;
+                trian = new TriangularRNG(0.7, 1.2 ,1.7);
+                naklady = trian.sample();
+                unif = new UniformDiscreteRNG(66, 155);
+                dopyt = unif.sample();
+                Cp = 2;
+                break;
+        }
+        double vysledok = (dopyt * Cp) - (max * naklady);
+        System.out.println("Zisk: " + vysledok);
+        return vysledok;
+    }
+
+    private static double pi(){
+        UniformContinuousRNG unif = new UniformContinuousRNG(0.0, 1.0);
+        int vsetky = 1000000;
+        int pocet = 0;
+        for (int i = 0; i < vsetky; i++){
+            double x = unif.sample();
+            double y = unif.sample();
+            if((x - 0.5)*(x - 0.5) + (y - 0.5)*(y - 0.5) <= 0.5*0.5){
+                pocet++;
+            }
+        }
+        double vysledok = ((double)pocet / vsetky) / 0.5*0.5;
+        System.out.println("Pi: " + vysledok);
         return vysledok;
     }
 }
