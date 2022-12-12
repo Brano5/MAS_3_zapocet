@@ -14,13 +14,17 @@ public class Main {
         //monteCralo(100000);
         //syr(100);
 
-        pi();
-        /*int replikacie = 1000000;
+        //pi();
+        cestovatel();
+        int replikacie = 100000;
         double spolu = 0;
+        double spolu2 = 0;
         for (int i = 0; i < replikacie; i++) {
-            spolu += remeselnik(1);
+            Number[] n = cestovatel();
+            spolu += n[0].intValue();
+            spolu2 += n[1].doubleValue();
         }
-        System.out.println("Priemerny zisk: " + spolu / replikacie);*/
+        System.out.println("Den: " + spolu / replikacie + ", za: " + spolu2 / replikacie);
     }
 
     private static void monteCralo(int vsetky){
@@ -121,8 +125,35 @@ public class Main {
                 pocet++;
             }
         }
-        double vysledok = ((double)pocet / vsetky) / 0.5*0.5;
+        double vysledok = ((double)pocet / vsetky) / (0.5*0.5);
         System.out.println("Pi: " + vysledok);
         return vysledok;
+    }
+
+    private static Number[] cestovatel(){
+        TriangularRNG trian = new TriangularRNG(0.01, 0.04, 0.11);
+        UniformContinuousRNG unif = new UniformContinuousRNG(0.05, 0.14);
+        double cena = 500;
+        double naplnenost = 0.27;
+        int den = 0;
+        double za = cena;
+        for (int i = 0; i < 6; i++) {
+            double x = trian.sample();
+            naplnenost += unif.sample();
+            if (naplnenost >= 0.75){
+                cena *= 1.3;
+                break;
+            }
+            cena *= (1-x);
+            if(cena < za){
+                den = i;
+                za = cena;
+            }
+        }
+        System.out.println("Den: " + den + ", za: " + za);
+        Number[] r = new Number[2];
+        r[0] = den;
+        r[1] = za;
+        return r;
     }
 }
